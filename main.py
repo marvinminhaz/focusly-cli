@@ -1,9 +1,21 @@
+import os
+
+from persist import read_file, update_file
+
 # INITIAL VARIABLES
 title = "focusly-cli"
 helper = "Commands: add(a) | list(l) | done(d) | delete(del) | quit(q)"
 width = 80
 border = "═" * (width - 2)
-tasks = []
+filepath = "memory/list.json"
+dir_path = "memory"
+
+
+#CHECKING FILE ALREADY EXISTS
+if os.path.isfile(filepath):
+    tasks = read_file(filepath)
+else:
+    tasks = []
 
 
 # FUNCTIONS
@@ -11,9 +23,10 @@ def add_task(task):
     if task != "..":
         tasks.append(task)
         print(f"{task} added to list")
+        update_file(dir_path, filepath, tasks)
 
 
-def listTasks():
+def list_tasks():
     if len(tasks) > 0:
         for i, value in enumerate(tasks):
             print(f"{i}. {value}")
@@ -21,34 +34,38 @@ def listTasks():
         print("No items in list")
 
 
-def doneTask(task):
+def done_task(task):
     # strikethrough ANSI sequence
     if task.isdigit():
         task = int(task)
         if 0 <= task <= len(tasks):
             tasks[task] = f"\033[9m{tasks[task]}\033[0m"
-            listTasks()
+            list_tasks()
+            update_file(dir_path, filepath, tasks)
     elif isinstance(task, str):
         idx = tasks.index(task)
         tasks[idx] = f"\033[9m{tasks[idx]}\033[0m"
-        listTasks()
+        list_tasks()
+        update_file(dir_path, filepath, tasks)
     else:
         print("Task not in list")
 
 
-def deleteTask(task):
+def delete_task(task):
     if task.isdigit():
         task = int(task)
         if 0 <= task <= len(tasks):
             tasks.pop(task)
             print(f"Deleted task {task}")
-            listTasks()
+            list_tasks()
+            update_file(dir_path, filepath, tasks)
     elif isinstance(task, str):
         if task in tasks:
             idx = tasks.index(task)
             tasks.pop(idx)
             print(f"Deleted task {task}")
-            listTasks()
+            list_tasks()
+            update_file(dir_path, filepath, tasks)
     else:
         print("Task not in list")
 
@@ -64,6 +81,7 @@ while True:
     ╚{border}╝
     """
     )
+
     job = str(input("focusly ❯ "))
 
     # QUITTING
@@ -73,22 +91,22 @@ while True:
     # ADD TASK
     elif job == "add" or job == "a" or job == "A":
         while job != "..":
-            job = str(input("focusly ❯ add ❯ "))
+            job = str(input("focusly ❯ add ❯ ")).strip()
             add_task(job)
 
     # DISPLAY LIST
     elif job == "list" or job == "l" or job == "L":
-        listTasks()
+        list_tasks()
 
     # MARK DONE
     elif job == "done" or job == "d" or job == "D":
         job = input("focusly ❯ done ❯ ")
-        doneTask(job)
+        done_task(job)
 
     # DELETE TASK
     elif job == "delete" or job == "del" or job == "DEL" or job == "del":
         job = input("focusly ❯ delete ❯ ")
-        deleteTask(job)
+        delete_task(job)
 
     # ALT
     else:
