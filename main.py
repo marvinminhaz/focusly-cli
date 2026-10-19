@@ -65,25 +65,31 @@ while True:
     """
     )
     job = str(input("focusly ❯ "))
+
     # QUITTING
     if job == "quit" or job == "q" or job == "Q" or job == "exit":
         break
+
     # ADD TASK
     elif job == "add" or job == "a" or job == "A":
         while job != "..":
             job = str(input("focusly ❯ add ❯ "))
             add_task(job)
+
     # DISPLAY LIST
     elif job == "list" or job == "l" or job == "L":
         listTasks()
+
     # MARK DONE
     elif job == "done" or job == "d" or job == "D":
         job = input("focusly ❯ done ❯ ")
         doneTask(job)
+
     # DELETE TASK
     elif job == "delete" or job == "del" or job == "DEL" or job == "del":
         job = input("focusly ❯ delete ❯ ")
         deleteTask(job)
+
     # ALT
     else:
         print("Invalid input")
