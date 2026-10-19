@@ -3,9 +3,7 @@ helper = 'Type add, list, done, delete, quit'
 
 tasks = {}
 
-
-
-
+#FUNCTIONS
 def add_task(task):
     count = len(tasks)
     if task != '..':
@@ -33,13 +31,10 @@ def doneTask(taskNum):
     else:
         print('Task not in list')
 
-
 def updateList():
     count = len(tasks)
     for v in tasks.values():
         tasks[count + 1] = v
-
-
 
 def deleteTask(taskNum):
     total_items = len(tasks)
@@ -55,37 +50,35 @@ def deleteTask(taskNum):
 
 
 while True:
-    print(f'''      {title}
-    {helper}''')
-
+    #WELCOME PROMPT
+    print(f'''
+            {title}
+    {helper}
+    ''')
     job = str(input("focusly ❯ "))
-
-
-
+    #QUIT FOCUSLY
     if job == 'quit' or job == 'q':
         break
-
+    #ADD TASKS
     elif job == 'add':
         while job != '..':
             job = str(input("focusly ❯ add ❯ "))
             add_task(job)
-
+    #LIST TASKS
     elif job == 'list':
         listTasks()
-
+    #MASK AS DONE
     elif job == 'done':
         job = input("focusly ❯ done ❯ ")
         if job.isdigit():
             doneTask(int(job))
         else:
             doneTask(job)
-
+    #DELETE TASK
     elif job == 'delete':
         job = input("focusly ❯ delete ❯ ")
         if job.isdigit():
             deleteTask(int(job))
-
-
-
+    #ALT
     else:
         print("Invalid input")
